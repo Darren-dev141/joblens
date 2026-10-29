@@ -55,6 +55,7 @@ Half the sample (5 of 10 rows) was independently re-checked by a second reviewer
 - `joblens-v1.1-light-original.html` — the original light-theme v1.1 file, preserved as shipped.
 - `RELEASE-NOTES-v1.1.md` — provenance, classification detail, and the release gate the founding snapshot passed.
 - `RELEASE-NOTES-v1.2.md` — what changed in this update, where every number came from, and how the feed dataset was built.
+- `RELEASE-NOTES-v1.2.1.md` — the CSS-only visual polish pass; data and behavior unchanged.
 - `tools/build_feed_dataset.py` — the generator that converts a pipeline feed snapshot into the dashboard's feed dataset. Every field is copied or mechanically derived from the snapshot; nothing is hand-entered.
 
 ## Honest limitations

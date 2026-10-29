@@ -42,12 +42,9 @@ def build(snapshot):
     records = []
     for i, e in enumerate(entries, 1):
         note = e.get("verification_note") or ""
-        if "open-list API" in note:
-            route = "ats_api"
-        elif "employer page + apply path" in note:
-            route = "employer_page"
-        else:
-            route = "employer_page"
+        # Notes that record an open-list API check are ats_api; everything
+        # else is an employer page + apply-path check.
+        route = "ats_api" if "open-list API" in note else "employer_page"
         routes[route] += 1
         verified = (e.get("verified_at") or snapshot["as_of"])[:10]
         records.append({
@@ -103,12 +100,18 @@ def build(snapshot):
 
 
 def main():
+    if len(sys.argv) != 3:
+        sys.exit(__doc__)
     src, out = sys.argv[1], sys.argv[2]
-    with open(src) as f:
+    with open(src, encoding="utf-8") as f:
         snapshot = json.load(f)
     data = build(snapshot)
-    with open(out, "w") as f:
-        json.dump(data, f, indent=1)
+    # "<" is escaped so the JSON stays safe when embedded in an inline
+    # <script> block: a posting title containing "</script>" or "<!--" cannot
+    # end or alter the script element. The escaped text is still valid JSON.
+    text = json.dumps(data, indent=1).replace("<", "\\u003c")
+    with open(out, "w", encoding="utf-8") as f:
+        f.write(text)
     print(f"wrote {out}: {data['metrics']['total']} records, routes {data['metrics']['routes']}")
 
 
